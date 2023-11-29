@@ -1,0 +1,8 @@
+python-3.9.0
+export DATABASE_URL=sqlite:///mydatabase.db
+
+cloudinary
+django-storages
+psycopg2-binary
+tensorflow
+astunparse

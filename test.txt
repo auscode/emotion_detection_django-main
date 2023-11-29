@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emotion Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #imageInput {
+            margin-bottom: 10px;
+        }
+
+        #resultContainer {
+            margin-top: 20px;
+        }
+
+        #resultContainer img {
+            max-width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="file" id="imageInput" accept="image/*" />
+    <button onclick="uploadImage()">Upload Image</button>
+
+    <div id="resultContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+       function uploadImage() {
+            const imageInput = document.getElementById("imageInput");
+            const file = imageInput.files[0];
+
+            if (!file) {
+                console.error("No image selected.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("image", file);
+
+            // Show loading message or spinner
+            const resultContainer = document.getElementById("resultContainer");
+            resultContainer.innerHTML = "Processing image...";
+
+            axios
+                .post("http://127.0.0.1:8000/face_detection/", formData)
+                .then((response) => {
+                    displayResult(response.data);
+                })
+                console.log(response.data)
+                .catch((error) => {
+                    console.error("Error uploading image", error);
+                    resultContainer.innerHTML = "Error processing image. Please try again.";
+                });
+        }
+
+        function displayResult(data) {
+            console.log("2290");
+            const resultContainer = document.getElementById("resultContainer");
+            resultContainer.innerHTML = "";
+
+            // Display detected emotion
+            const emotionParagraph = document.createElement("p");
+            emotionParagraph.innerText = `Detected Emotion: ${data.success}`;
+            resultContainer.appendChild(emotionParagraph);
+
+            // Display songs
+            const songsHeading = document.createElement("h3");
+            songsHeading.innerText = "Songs:";
+            resultContainer.appendChild(songsHeading);
+
+            const songsList = document.createElement("ul");
+            data.songs.forEach((song) => {
+                const listItem = document.createElement("li");
+                listItem.innerHTML = `<strong>${song.name}</strong> - ${song.link}`;
+                songsList.appendChild(listItem);
+            });
+            resultContainer.appendChild(songsList);
+
+            // Display books
+            const booksHeading = document.createElement("h3");
+            booksHeading.innerText = "Books:";
+            resultContainer.appendChild(booksHeading);
+
+            const booksList = document.createElement("ul");
+            data.books.forEach((book) => {
+                const listItem = document.createElement("li");
+                listItem.innerHTML = `<strong>${book.title}</strong> by ${book.author} - ${book.link}`;
+                booksList.appendChild(listItem);
+            });
+            resultContainer.appendChild(booksList);
+        }
+    </script>
+</body>
+
+</html>
