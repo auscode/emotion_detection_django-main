@@ -62,11 +62,13 @@ class ImageViewSet(ListAPIView):
         songs = Song.objects.filter(type=dominant_emotion.lower())
         # songs_serialized = [{"id": song.id, "name": song.name, "emotion": song.type, "link": song.link} for song in songs]
         songs_serialized = SongSerializer(songs, many=True).data
+        print(songs_serialized)
 
 
         books = Book.objects.filter(emotion=dominant_emotion.lower())
         # books_serialized = [{"id": book.id, "title": book.title, "author": book.author, "genre": book.genre, "link": book.link} for book in books]
         books_serialized = BookSerializer(books, many=True).data
+        print(books_serialized)
 
         return Response({"success": dominant_emotion, "songs": songs_serialized, "books": books_serialized}, status=status.HTTP_202_ACCEPTED)
 
