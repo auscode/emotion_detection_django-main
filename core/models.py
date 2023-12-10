@@ -19,12 +19,16 @@ class Song(models.Model):
 
     )
 
-    name = models.CharField(max_length=150);
-    type = models.CharField(choices= TYPES,max_length= 50);
+    name = models.CharField(max_length=150)
+    type = models.CharField(choices= TYPES,max_length= 50)
     link = models.CharField(max_length= 1000)
+    singer = models.CharField(max_length=150,  default='')
+    thumbnail = models.ImageField(upload_to='song_thumbnails/', null=True, blank=True)
+    duration = models.CharField(max_length=20, blank=True)
 
     def __str__(self):
-        return self.type + " " + self.name;    
+        return f"{self.type} - {self.name} by {self.singer}"
+        # return self.type + " " + self.name;    
 
 class Book(models.Model):
     GENRES = (
@@ -58,6 +62,8 @@ class Book(models.Model):
     author = models.CharField(max_length=150)
     link = models.CharField(max_length=1000)
     emotion = models.CharField(choices=EMOTIONS, max_length=50)
+    thumbnail = models.ImageField(upload_to='book_thumbnails/', null=True, blank=True)
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return f"{self.emotion} - {self.genre} - {self.title} by {self.author}"

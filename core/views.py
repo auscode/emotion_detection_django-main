@@ -2,7 +2,8 @@ from django.core.files.storage import default_storage
 from rest_framework.generics import ListAPIView
 from .models import Photo,Emotion , Song, Book
 from rest_framework.response import Response
-from .serializers import ImageSerializer
+# from .serializers import ImageSerializer
+from .serializers import ImageSerializer, SongSerializer, BookSerializer, EmotionSerializer
 from rest_framework import status
 from django.conf import settings
 from PIL import Image as PImage
@@ -59,10 +60,13 @@ class ImageViewSet(ListAPIView):
         print("emotion checked ")
 
         songs = Song.objects.filter(type=dominant_emotion.lower())
-        songs_serialized = [{"id": song.id, "name": song.name, "emotion": song.type, "link": song.link} for song in songs]
+        # songs_serialized = [{"id": song.id, "name": song.name, "emotion": song.type, "link": song.link} for song in songs]
+        songs_serialized = SongSerializer(songs, many=True).data
+
 
         books = Book.objects.filter(emotion=dominant_emotion.lower())
-        books_serialized = [{"id": book.id, "title": book.title, "author": book.author, "genre": book.genre, "link": book.link} for book in books]
+        # books_serialized = [{"id": book.id, "title": book.title, "author": book.author, "genre": book.genre, "link": book.link} for book in books]
+        books_serialized = BookSerializer(books, many=True).data
 
         return Response({"success": dominant_emotion, "songs": songs_serialized, "books": books_serialized}, status=status.HTTP_202_ACCEPTED)
 
