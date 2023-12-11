@@ -21,9 +21,10 @@ class Song(models.Model):
 
     name = models.CharField(max_length=150)
     type = models.CharField(choices= TYPES,max_length= 50)
-    link = models.CharField(max_length= 1000)
-    singer = models.CharField(max_length=150,  default='')
-    thumbnail = models.ImageField(upload_to='song_thumbnails/', null=True, blank=True)
+    link = models.FileField(upload_to='song_files/')  # Change to FileField for file upload
+    singer = models.CharField(max_length=150, default='')
+    thumbnail = models.URLField(max_length=1000, blank=True, null=True)  # Change to URLField for thumbnail
+
     duration = models.CharField(max_length=20, blank=True)
 
     def __str__(self):
@@ -60,9 +61,9 @@ class Book(models.Model):
     title = models.CharField(max_length=150)
     genre = models.CharField(choices=GENRES, max_length=50)
     author = models.CharField(max_length=150)
-    link = models.CharField(max_length=1000)
+    link = models.FileField(upload_to='book_files/')  # Change to FileField for file upload
     emotion = models.CharField(choices=EMOTIONS, max_length=50)
-    thumbnail = models.ImageField(upload_to='book_thumbnails/', null=True, blank=True)
+    thumbnail = models.URLField(max_length=1000, blank=True, null=True)  # Change to URLField for thumbnail
     description = models.TextField(blank=True)
 
     def __str__(self):
