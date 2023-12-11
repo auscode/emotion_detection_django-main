@@ -6,3 +6,13 @@ django-storages
 psycopg2-binary
 tensorflow
 astunparse
+
+
+other docs
+basic overview
+https://www.notion.so/BhaavDarshak-e38930cdd77a412894c419e9fd681e8f
+
+drive Books
+https://drive.google.com/drive/folders/1PwEmpGXLMDZzZ7erb6DfwcWARtdncdyP?usp=sharing
+
+
