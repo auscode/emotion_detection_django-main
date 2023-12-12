@@ -41,36 +41,48 @@ class ImageViewSet(ListAPIView):
     queryset = Photo.objects.all()
     serializer_class = ImageSerializer
 
+    
     def post(self, request, *args, **kwargs):
-        file = request.data['image']
-        Photo.objects.create(image=file)
-        obj = Photo.objects.all().last()
-        image = obj.image
+        try:
+            print(request.data.keys())
+            file = request.data['image']
+            if not file:
+                return Response({"error": "Image key not found in the request data"}, status=status.HTTP_400_BAD_REQUEST)
+            Photo.objects.create(image=file)
+            obj = Photo.objects.all().last()
+            image = obj.image
 
-        detector = FER(mtcnn=True)
-        img = plt.imread(settings.MEDIA_ROOT + "/" + image.name)
+            detector = FER(mtcnn=True)
+            img = plt.imread(settings.MEDIA_ROOT + "/" + image.name)
 
-        detected_emotions = detector.detect_emotions(img)
+            detected_emotions = detector.detect_emotions(img)
 
-        dominant_emotion = max(detected_emotions[0]['emotions'], key=detected_emotions[0]['emotions'].get)
+            dominant_emotion = max(detected_emotions[0]['emotions'], key=detected_emotions[0]['emotions'].get)
 
-        obj.delete()
+            obj.delete()
 
-        emotion_obj = Emotion.objects.create(emotion=dominant_emotion)
-        print("emotion checked ")
+            emotion_obj = Emotion.objects.create(emotion=dominant_emotion)
+            print("emotion checked ")
 
-        songs = Song.objects.filter(type=dominant_emotion.lower())
-        # songs_serialized = [{"id": song.id, "name": song.name, "emotion": song.type, "link": song.link} for song in songs]
-        songs_serialized = SongSerializer(songs, many=True).data
-        print(songs_serialized)
+            songs = Song.objects.filter(type=dominant_emotion.lower())
+            # songs_serialized = [{"id": song.id, "name": song.name, "emotion": song.type, "link": song.link} for song in songs]
+            songs_serialized = SongSerializer(songs, many=True).data
+            print(songs_serialized)
 
 
-        books = Book.objects.filter(emotion=dominant_emotion.lower())
-        # books_serialized = [{"id": book.id, "title": book.title, "author": book.author, "genre": book.genre, "link": book.link} for book in books]
-        books_serialized = BookSerializer(books, many=True).data
-        print(books_serialized)
+            books = Book.objects.filter(emotion=dominant_emotion.lower())
+            # books_serialized = [{"id": book.id, "title": book.title, "author": book.author, "genre": book.genre, "link": book.link} for book in books]
+            books_serialized = BookSerializer(books, many=True).data
+            print(books_serialized)
 
-        return Response({"success": dominant_emotion, "songs": songs_serialized, "books": books_serialized}, status=status.HTTP_202_ACCEPTED)
+            return Response({"success": dominant_emotion, "songs": songs_serialized, "books": books_serialized}, status=status.HTTP_202_ACCEPTED)
+        except KeyError:
+            # Handle the case where the 'image' key is not present in request.data
+            return Response({"error": "Image key not found in the request data"}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # Handle other exceptions gracefully
+            print(f"Error processing image: {str(e)}")
+            return Response({"error": "Internal Server Error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     def get(self, request, *args, **kwargs):
         # Retrieve the last posted photo
@@ -79,15 +91,11 @@ class ImageViewSet(ListAPIView):
         songs = Song.objects.filter(type=last_emotion.emotion.lower())
         books = Book.objects.filter(emotion=last_emotion.emotion.lower())
 
-        # Serialize the objects
-        # photo_serialized = ImageSerializer(last_photo).data
         emotion_serialized = EmotionSerializer(last_emotion).data
         songs_serialized = SongSerializer(songs, many=True).data
         books_serialized = BookSerializer(books, many=True).data
 
-        # Include serialized objects in the response
         response_data = {
-            # "last_photo": photo_serialized,
             "last_emotion": emotion_serialized,
             "songs": songs_serialized,
             "books": books_serialized,
