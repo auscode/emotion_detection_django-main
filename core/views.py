@@ -71,6 +71,29 @@ class ImageViewSet(ListAPIView):
         print(books_serialized)
 
         return Response({"success": dominant_emotion, "songs": songs_serialized, "books": books_serialized}, status=status.HTTP_202_ACCEPTED)
+    
+    def get(self, request, *args, **kwargs):
+        # Retrieve the last posted photo
+        last_photo = Photo.objects.last()
+        last_emotion = Emotion.objects.last()
+        songs = Song.objects.filter(type=last_emotion.emotion.lower())
+        books = Book.objects.filter(emotion=last_emotion.emotion.lower())
+
+        # Serialize the objects
+        # photo_serialized = ImageSerializer(last_photo).data
+        emotion_serialized = EmotionSerializer(last_emotion).data
+        songs_serialized = SongSerializer(songs, many=True).data
+        books_serialized = BookSerializer(books, many=True).data
+
+        # Include serialized objects in the response
+        response_data = {
+            # "last_photo": photo_serialized,
+            "last_emotion": emotion_serialized,
+            "songs": songs_serialized,
+            "books": books_serialized,
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
 
 # class EmotionViewSet(ListAPIView):
 #     queryset = Emotion.objects.all()
