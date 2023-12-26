@@ -4,6 +4,8 @@ This Django project uses facial emotion detection to recommend songs and books b
 
 ## Demo Images
 
+- ![img1.png](demoImages/img1.png)
+- ![img2.png](demoImages/img2.png)
 - ![bookdb.png](demoImages/bookdb.png)
 - ![demo1.png](demoImages/demo1.png)
 - ![demo2.png](demoImages/demo2.png)
@@ -11,8 +13,6 @@ This Django project uses facial emotion detection to recommend songs and books b
 - ![emo2.0.png](demoImages/emo2.0.png)
 - ![emo2.1.png](demoImages/emo2.1.png)
 - ![img.png](demoImages/img.png)
-- ![img1.png](demoImages/img1.png)
-- ![img2.png](demoImages/img2.png)
 - ![song and book.png](demoImages/song%20and%20book.png)
 - ![songdb.png](demoImages/songdb.png)
 - ![songdb (2).png](demoImages/songdb%20(2).png)
