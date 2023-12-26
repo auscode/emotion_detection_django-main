@@ -32,7 +32,9 @@ SECRET_KEY = 'django-insecure-a_xc5^!1+5s5c#*3wb2y$giwc5d*2t*nyjmm=*zokr&s)3$(fc
 DEBUG = True
 
 # ALLOWED_HOSTS = ["emotion-5o43.onrender.com", "localhost"]
+# ALLOWED_HOSTS = ["192.168.43.103","127.0.0.1","localhost"]
 ALLOWED_HOSTS = ["*"]
+
 
 
 # Application definition
