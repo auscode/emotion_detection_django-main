@@ -75,7 +75,7 @@ Follow these steps to set up and run the project:
 
 ## Notes
 
-- The project uses TensorFlow for emotion detection, Cloudinary for image storage, and Django for the web framework.
+- The project uses TensorFlow for emotion detection and Django for the web framework.
 
 - Ensure that your environment supports the required dependencies, including TensorFlow.
 
